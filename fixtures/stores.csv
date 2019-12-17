@@ -1,0 +1,16 @@
+code,name,website_code,group_code,order,active
+"store_desktop_eng","Desktop PC's","web_computer","grp_desktop",10,1
+"store_desktop_ru","Настольный компьютер","web_computer","grp_desktop",20,1
+"store_desktop_de","Desktop-Computer","web_computer","grp_desktop",30,1
+"store_desktop_dis","PC disabled","web_computer","grp_desktop",40,0
+"store_laptop_eng","Laptop Computers","web_computer","grp_laptop",10,1
+"store_laptop_ru","Лаптопы","web_computer","grp_laptop",20,1
+"store_laptop_de","Der Laptop","web_computer","grp_laptop",30,1
+"store_laptop_dis","Laptop disabled","web_computer","grp_laptop",40,0
+"store_tablet_eng","Tablet Computers","web_phone","grp_tablet",10,1
+"store_tablet_ru","Планшет","web_phone","grp_tablet",20,1
+"store_tablet_de","Tablet","web_phone","grp_tablet",30,1
+"store_tablet_dis","Tablet disabled","web_phone","grp_tablet",40,0
+"store_accessory_eng","Accessories","web_phone","grp_accessory",10,0
+"store_accessory_ru","Аксессуары","web_phone","grp_accessory",20,0
+"store_accessory_de","Das Zubehör","web_phone","grp_accessory",30,0

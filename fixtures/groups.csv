@@ -1,0 +1,5 @@
+code,name,website_code,store_default
+"grp_desktop","Desktop PCs","web_computer","store_desktop_eng"
+"grp_laptop","Laptops","web_computer","store_laptop_eng"
+"grp_tablet","Tablets","web_phone","store_tablet_eng"
+"grp_accessory","Phone Accessories","web_phone","store_accessory_eng"
