@@ -36,15 +36,12 @@ class WebsiteSampleData implements DataPatchInterface
     protected $installer;
 
     /**
-     * InstallGiftRegistrySampleData constructor.
      * @param Setup\SampleData\Executor $executor
-     * @param Installer $installer
+     * @param Installer                 $installer
      */
-    public function __construct(
-        Setup\SampleData\Executor $executor,
-        Installer $installer
-    ) {
-        $this->executor = $executor;
+    public function __construct(Setup\SampleData\Executor $executor, Installer $installer)
+    {
+        $this->executor  = $executor;
         $this->installer = $installer;
     }
 

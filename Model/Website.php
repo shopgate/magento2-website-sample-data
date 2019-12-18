@@ -307,8 +307,8 @@ class Website
     }
 
     /**
-     * @param string $locale
-     * @param string $weight
+     * @param string $locale - en_US, de_DE, ru_RU, etc.
+     * @param string $weight - kgs, lbs
      * @param int    $id    - id of store, website or 0 for default
      * @param string $scope - default, websites, stores
      */
