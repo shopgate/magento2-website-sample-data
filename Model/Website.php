@@ -234,7 +234,8 @@ class Website
         try {
             $store = $this->storeRepository->get($code);
         } catch (NoSuchEntityException $e) {
-            $storeModel = $this->storeFactory->create(
+            $store = $this->storeFactory->create();
+            $store->addData(
                 [
                     'code'       => $code,
                     'name'       => $name,
@@ -245,7 +246,7 @@ class Website
                 ]
             );
             /** @noinspection PhpUnhandledExceptionInspection */
-            $store = $this->storeResource->save($storeModel);
+            $this->storeResource->save($store);
         }
 
         return $store;
@@ -264,7 +265,8 @@ class Website
         try {
             $website = $this->websiteRepository->get($code);
         } catch (NoSuchEntityException $e) {
-            $websiteModel = $this->websiteFactory->create(
+            $website = $this->websiteFactory->create();
+            $website->addData(
                 [
                     'code'       => $code,
                     'name'       => $name,
@@ -272,7 +274,7 @@ class Website
                 ]
             );
             /** @noinspection PhpUnhandledExceptionInspection */
-            $website = $this->webisteResource->save($websiteModel);
+            $this->webisteResource->save($website);
         }
 
         return $website;
@@ -289,9 +291,9 @@ class Website
     private function createGroup(string $code, string $name, WebsiteInterface $website): GroupInterface
     {
         try {
-            $groupModel =
-                $this->groupFactory->create(['code' => $code, 'name' => $name, 'website_id' => $website->getId()]);
-            $group      = $this->groupResource->save($groupModel);
+            $group = $this->groupFactory->create();
+            $group->addData(['code' => $code, 'name' => $name, 'website_id' => $website->getId()]);
+            $this->groupResource->save($group);
         } catch (AlreadyExistsException $e) {
             $groups = array_filter(
                 $this->groupRepository->getList(),
@@ -309,8 +311,8 @@ class Website
     /**
      * @param string $locale - en_US, de_DE, ru_RU, etc.
      * @param string $weight - kgs, lbs
-     * @param int    $id    - id of store, website or 0 for default
-     * @param string $scope - default, websites, stores
+     * @param int    $id     - id of store, website or 0 for default
+     * @param string $scope  - default, websites, stores
      */
     private function saveConfigs(
         string $locale,
