@@ -25,7 +25,8 @@
             "registration.php"
         ],
         "psr-4": {
-            "Shopgate\\WebsiteSampleData\\": ""
+            "Shopgate\\WebsiteSampleData\\": "",
+            "Shopgate\\WebsiteSampleData\\Test\\": "Test"
         }
     }
 }

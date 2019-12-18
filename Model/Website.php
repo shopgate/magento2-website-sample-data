@@ -168,7 +168,7 @@ class Website
         $this->runCreator(
             $configFixture,
             function (array $row) use ($stores) {
-                $this->saveConfigs($row['locale'], $row['weight_unit'], $stores[$row['code']]->getId());
+                $this->saveConfigs($row['locale'], $row['weight_unit'], (int) $stores[$row['code']]->getId());
             }
         );
     }
@@ -290,19 +290,18 @@ class Website
      */
     private function createGroup(string $code, string $name, WebsiteInterface $website): GroupInterface
     {
-        try {
+        $groups = array_filter(
+            $this->groupRepository->getList(),
+            static function ($group) use ($code) {
+                /** @var GroupInterface $group */
+                return $group->getCode() === $code;
+            }
+        );
+        $group  = array_pop($groups);
+        if (!$group) {
             $group = $this->groupFactory->create();
             $group->addData(['code' => $code, 'name' => $name, 'website_id' => $website->getId()]);
             $this->groupResource->save($group);
-        } catch (AlreadyExistsException $e) {
-            $groups = array_filter(
-                $this->groupRepository->getList(),
-                static function ($group) use ($code) {
-                    /** @var GroupInterface $group */
-                    return $group->getCode() === $code;
-                }
-            );
-            $group  = $groups[0];
         }
 
         return $group;
