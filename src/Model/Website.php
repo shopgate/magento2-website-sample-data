@@ -300,7 +300,9 @@ class Website
         $group  = array_pop($groups);
         if (!$group) {
             $group = $this->groupFactory->create();
-            $group->addData(['code' => $code, 'name' => $name, 'website_id' => $website->getId()]);
+            $group->addData(
+                ['code' => $code, 'name' => $name, 'website_id' => $website->getId(), 'root_category_id' => 2]
+            );
             $this->groupResource->save($group);
         }
 
