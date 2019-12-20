@@ -1,32 +1,31 @@
 {
-    "name": "shopgate/magento2-website-sample-data",
-    "description": "Sample data that provides multiple websites and stores to use for various work",
-    "license": "Apache-2.0",
-    "version": "0.1.0",
-    "type": "magento2-module",
-    "authors": [
-        {
-            "name": "Shopgate",
-            "email": "interfaces@shopgate.com"
-        }
+  "name": "shopgate/magento2-website-sample-data",
+  "description": "Sample data that provides multiple websites and stores to use for various work",
+  "license": "Apache-2.0",
+  "version": "0.1.0",
+  "type": "magento2-module",
+  "authors": [
+    {
+      "name": "Shopgate",
+      "email": "interfaces@shopgate.com"
+    }
+  ],
+  "require": {
+    "php": "~7.2.0",
+    "magento/module-directory": "100.3.*",
+    "magento/module-sample-data": "100.3.*",
+    "magento/module-store": "101.0.*"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-master"
+  },
+  "autoload": {
+    "files": [
+      "src/registration.php"
     ],
-    "require": {
-        "php": "~7.2.0",
-        "magento/module-directory": "100.3.*",
-        "magento/module-sample-data": "100.3.*",
-        "magento/module-store": "101.0.*"
+    "psr-4": {
+      "Shopgate\\WebsiteSampleData\\": "src",
+      "Shopgate\\WebsiteSampleData\\Test\\": "src/Test"
     }
-    ,
-    "require-dev": {
-        "roave/security-advisories": "dev-master"
-    },
-    "autoload": {
-        "files": [
-            "src/registration.php"
-        ],
-        "psr-4": {
-            "Shopgate\\WebsiteSampleData\\": "src",
-            "Shopgate\\WebsiteSampleData\\Test\\": "src/Test"
-        }
-    }
+  }
 }
