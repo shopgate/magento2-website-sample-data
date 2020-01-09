@@ -6,7 +6,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 ### Added
-- Weight configurations
 - Currency configurations
 - Default website, groups and store views
 - Thorough tests
@@ -16,7 +15,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - 2 websites
 - 5 store groups
 - 15 store views
-- Added language configurations
+- Language configurations
+- Weight configurations
 - Basic test
 
 [0.1.0]: https://github.com/shopgate/magento2-website-sample-data/releases/tag/0.1.0
