@@ -11,14 +11,14 @@ products, etc. to the websites here. It would be bare minimum to increase speed 
         * store_desktop_de - German, kgs, EUR, default
         * store_desktop_dis - English, lbs, USD, disabled
     * grp_laptop - default
-        * store_laptop_en - English, lbs, USD
-        * store_laptop_ru - Russian, kgs, RUB, default
+        * store_laptop_en - English, lbs, USD, default
+        * store_laptop_ru - Russian, kgs, RUB
         * store_laptop_de - German, kgs, EUR
         * store_laptop_dis - English, lbs, USD, disabled
 * web_phone
     * grp_tablet - default
-        * store_tablet_en - English, lbs, USD, default
-        * store_tablet_ru - Russian, kgs, RUB
+        * store_tablet_en - English, lbs, USD
+        * store_tablet_ru - Russian, kgs, RUB, default
         * store_tablet_de - German, kgs, EUR
         * store_tablet_dis - English, lbs, USD, disabled
 * grp_accessory - disabled
