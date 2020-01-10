@@ -41,7 +41,16 @@ Run tests the same way you do normally. You may also adjust your integration php
  /var/www/html/vendor/phpunit/phpunit/phpunit --configuration /var/www/html/dev/tests/integration/phpunit.xml /var/www/html/vendor/shopgate/magento2-website-sample-data/src/Test/Integration
 ```
 
-
+### Uninstall
+Can also  use the standard magento feature to remove the data
+```$xslt
+bin/magento sampledata:remove
+bin/magento setup:upgrade
+```
+Or manually:
+```$xslt
+bin/magento module:uninstall Shopgate_WebsiteSampleData --remove-data
+```
 ### Todo's
 We'll need to populate these entities with proper data to do tests on.
 

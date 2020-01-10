@@ -78,9 +78,7 @@ class Website
     private $storeFactory;
     /** @var StoreResource */
     private $storeResource;
-    /**
-     * @var WriterInterface
-     */
+    /** * @var WriterInterface */
     private $writer;
 
     /**

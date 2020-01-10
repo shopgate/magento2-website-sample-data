@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Currency configurations
 - Default website, groups and store views
 - Thorough tests
+- Removal feature
 
 ## [0.1.0]
 ### Added
