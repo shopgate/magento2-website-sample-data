@@ -38,7 +38,7 @@ If you have any other magento 2 plugin that suggests this sample data, e.g. [sho
 ### Tests
 Run tests the same way you do normally. You may also adjust your integration phpunit.xml to include the tests in the run.
 ```$xslt
- /var/www/html/vendor/phpunit/phpunit/phpunit --configuration /var/www/html/dev/tests/integration/phpunit.xml /var/www/html/vendor/shopgate/magento2-website-sample-data/src/Test/Integration
+ /var/www/html/vendor/phpunit/phpunit/phpunit --configuration /var/www/html/dev/tests/integration/phpunit.xml /var/www/html/vendor/shopgate/magento2-website-sample-data/Test/Integration
 ```
 
 ### Uninstall

@@ -21,11 +21,11 @@
   },
   "autoload": {
     "files": [
-      "src/registration.php"
+      "registration.php"
     ],
     "psr-4": {
-      "Shopgate\\WebsiteSampleData\\": "src",
-      "Shopgate\\WebsiteSampleData\\Test\\": "src/Test"
+      "Shopgate\\WebsiteSampleData\\": "",
+      "Shopgate\\WebsiteSampleData\\Test\\": "Test"
     }
   }
 }
