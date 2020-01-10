@@ -33,24 +33,29 @@ Can be installed manually by including the package via composer:
 composer require shopgate/magento2-website-sample-data
 ```
 
-If you have any other magento 2 plugin that suggests this sample data, e.g. [shopgate/connect-integration-magento2] the sample data will be installed via regular magento command `bin/magento sampledata:deploy`
+If you have any other magento 2 plugin that suggests this sample data, e.g. [shopgate/connect-integration-magento2] 
+the sample data will be installed via regular magento command `bin/magento sampledata:deploy`
 
 ### Tests
-Run tests the same way you do normally. You may also adjust your integration phpunit.xml to include the tests in the run.
+Run tests the same way you do normally. You may also adjust your integration phpunit.xml to include the tests in 
+the run.
 ```$xslt
  /var/www/html/vendor/phpunit/phpunit/phpunit --configuration /var/www/html/dev/tests/integration/phpunit.xml /var/www/html/vendor/shopgate/magento2-website-sample-data/Test/Integration
 ```
 
 ### Uninstall
-Can also  use the standard magento feature to remove the data
+The best way to remove the module fully is manually:
+```$xslt
+bin/magento module:uninstall Shopgate_WebsiteSampleData --remove-data
+```
+
+You could also use the standard removal, but unlike the previous solution there is no hook that will remove the
+ websites, groups, stores and configs from the database. Just the module.
 ```$xslt
 bin/magento sampledata:remove
 bin/magento setup:upgrade
 ```
-Or manually:
-```$xslt
-bin/magento module:uninstall Shopgate_WebsiteSampleData --remove-data
-```
+
 ### Todo's
 We'll need to populate these entities with proper data to do tests on.
 
