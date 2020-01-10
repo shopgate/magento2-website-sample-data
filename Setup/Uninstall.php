@@ -25,12 +25,14 @@ declare(strict_types=1);
 namespace Shopgate\WebsiteSampleData\Setup;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Module\Setup;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UninstallInterface;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\ResourceModel\Website as WebsiteResource;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -40,10 +42,17 @@ class Uninstall implements UninstallInterface
 {
     /** * @var StoreManagerInterface */
     private $storeManager;
+    /** * @var WebsiteResource */
+    private $websiteResource;
 
-    public function __construct(StoreManagerInterface $storeManager)
+    /**
+     * @param StoreManagerInterface $storeManager
+     * @param WebsiteResource       $websiteResource
+     */
+    public function __construct(StoreManagerInterface $storeManager, WebsiteResource $websiteResource)
     {
-        $this->storeManager = $storeManager;
+        $this->storeManager    = $storeManager;
+        $this->websiteResource = $websiteResource;
     }
 
     /**
@@ -53,19 +62,25 @@ class Uninstall implements UninstallInterface
      * @param ModuleContextInterface     $context
      *
      * @return void
+     * @throws AlreadyExistsException
      */
     public function uninstall(SchemaSetupInterface $setup, ModuleContextInterface $context): void
     {
-        $uninstaller = $setup;
+        $uninstaller       = $setup;
         $defaultConnection = $uninstaller->getConnection(ResourceConnection::DEFAULT_CONNECTION);
 
-        $websiteCodes      = ['web_computer', 'web_phone'];
-        $escapedCodes      = $defaultConnection->quote($websiteCodes);
-        $storeIds          = $this->getCreatedStoreIds($websiteCodes);
-        $websiteTable      = $uninstaller->getTable('store_website');
-        $configTable       = $uninstaller->getTable('core_config_data');
+        $websiteCodes = ['web_computer', 'web_phone'];
+        $escapedCodes = $defaultConnection->quote($websiteCodes);
+        $storeIds     = $this->getCreatedStoreIds($websiteCodes);
+        $websiteTable = $uninstaller->getTable('store_website');
+        $configTable  = $uninstaller->getTable('core_config_data');
         $defaultConnection->delete($websiteTable, "`code` IN ($escapedCodes)");
         $defaultConnection->delete($configTable, "`scope_id` IN ($storeIds)");
+
+        // set the default website back
+        $websites = $this->storeManager->getWebsites();
+        $website  = array_shift($websites);
+        $this->websiteResource->save($website->setData('is_default', 1));
     }
 
     /**

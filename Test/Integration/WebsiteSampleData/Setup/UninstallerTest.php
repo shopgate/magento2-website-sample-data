@@ -56,6 +56,8 @@ class UninstallerTest extends TestCase
     }
 
     /**
+     * Don't simplify the expected exception
+     *
      * @throws LocalizedException
      * @expectedException NoSuchEntityException
      */
@@ -90,5 +92,10 @@ class UninstallerTest extends TestCase
             ScopeInterface::SCOPE_STORES,
             array_pop($stores)->getId()
         );
+
+        // the default website is set again
+        $websites = $storeManager->getWebsites();
+        $website  = array_shift($websites);
+        $this->assertSame('1', $website->getData('is_default'));
     }
 }
