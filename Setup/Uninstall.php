@@ -71,11 +71,15 @@ class Uninstall implements UninstallInterface
 
         $websiteCodes = ['web_computer', 'web_phone'];
         $escapedCodes = $defaultConnection->quote($websiteCodes);
-        $storeIds     = $this->getCreatedStoreIds($websiteCodes);
+        $websites     = $this->getCreatedWebsites($websiteCodes);
+        $stores       = $this->getCreatedStores($websites);
+        $storeIds     = $this->getKeys($stores);
+        $websiteIds   = $this->getKeys($websites);
         $websiteTable = $uninstaller->getTable('store_website');
         $configTable  = $uninstaller->getTable('core_config_data');
         $defaultConnection->delete($websiteTable, "`code` IN ($escapedCodes)");
-        $defaultConnection->delete($configTable, "`scope_id` IN ($storeIds)");
+        $defaultConnection->delete($configTable, "`scope_id` IN ($storeIds) AND `scope`='stores'");
+        $defaultConnection->delete($configTable, "`scope_id` IN ($websiteIds) AND `scope`='websites'");
 
         // set the default website back
         $websites = $this->storeManager->getWebsites();
@@ -84,27 +88,46 @@ class Uninstall implements UninstallInterface
     }
 
     /**
-     * @param string[] $websiteCodes
+     * Get stores belonging to the new websites
      *
-     * @return string id's of newly created stores
+     * @param WebsiteInterface[] $websites
+     *
+     * @return StoreInterface[]
      */
-    public function getCreatedStoreIds(array $websiteCodes): string
+    public function getCreatedStores(array $websites): array
     {
-        // Get newly created websites
-        $websites = array_map(
-            static function (WebsiteInterface $website) use ($websiteCodes) {
-                return in_array($website->getCode(), $websiteCodes, true);
-            },
-            $this->storeManager->getWebsites()
-        );
-        // Get stores belonging to the new websites
-        $stores = array_map(
+        return array_map(
             static function (StoreInterface $store) use ($websites) {
                 return isset($websites[$store->getWebsiteId()]);
             },
             $this->storeManager->getStores()
         );
+    }
 
-        return implode(',', array_keys($stores));
+    /**
+     * Get newly created websites
+     *
+     * @param string[] $websiteCodes
+     *
+     * @return WebsiteInterface[]
+     */
+    private function getCreatedWebsites(array $websiteCodes): array
+    {
+        return array_map(
+            static function (WebsiteInterface $website) use ($websiteCodes) {
+                return in_array($website->getCode(), $websiteCodes, true);
+            },
+            $this->storeManager->getWebsites()
+        );
+    }
+
+    /**
+     * @param WebsiteInterface[]|StoreInterface[] $entities
+     *
+     * @return string
+     */
+    private function getKeys(array $entities): string
+    {
+        return implode(',', array_keys($entities));
     }
 }

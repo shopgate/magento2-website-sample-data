@@ -128,7 +128,8 @@ class Website
      * @param string $websiteFixture
      * @param string $groupFixture
      * @param string $storeFixture
-     * @param string $configFixture
+     * @param string $storeConfigFixture
+     * @param string $websiteConfigFixture
      *
      * @throws LocalizedException
      */
@@ -136,7 +137,8 @@ class Website
         string $websiteFixture,
         string $groupFixture,
         string $storeFixture,
-        string $configFixture
+        string $storeConfigFixture,
+        string $websiteConfigFixture
     ): void {
         $websites = $this->runCreator(
             $websiteFixture,
@@ -166,14 +168,27 @@ class Website
             }
         );
 
+        // store configurations
         $this->runCreator(
-            $configFixture,
+            $storeConfigFixture,
             function (array $row) use ($stores) {
                 $this->saveConfigs(
                     $row['locale'],
                     $row['weight_unit'],
-                    $row['currency'],
                     (int) $stores[$row['code']]->getId()
+                );
+            }
+        );
+
+        // website configurations
+        $this->runCreator(
+            $websiteConfigFixture,
+            function (array $row) use ($websites) {
+                $this->writer->save(
+                    Currency::XML_PATH_CURRENCY_BASE,
+                    $row['currency'],
+                    ScopeInterface::SCOPE_WEBSITES,
+                    (int) $websites[$row['code']]->getId()
                 );
             }
         );
@@ -357,22 +372,18 @@ class Website
     }
 
     /**
-     * @param string $locale   - en_US, de_DE, ru_RU, etc.
-     * @param string $weight   - kgs, lbs
-     * @param string $currency - USD, EUR, RUB, YEN, etc.
-     * @param int    $id       - id of store, website or 0 for default
-     * @param string $scope    - default, websites, stores
+     * @param string $locale - en_US, de_DE, ru_RU, etc.
+     * @param string $weight - kgs, lbs
+     * @param int    $id     - id of store, website or 0 for default
+     * @param string $scope  - default, websites, stores
      */
     private function saveConfigs(
         string $locale,
         string $weight,
-        string $currency,
         int $id = 1,
         string $scope = ScopeInterface::SCOPE_STORES
     ): void {
         $this->writer->save(DirectoryHelper::XML_PATH_DEFAULT_LOCALE, $locale, $scope, $id);
         $this->writer->save(DirectoryHelper::XML_PATH_WEIGHT_UNIT, $weight, $scope, $id);
-        $this->writer->save(Currency::XML_PATH_CURRENCY_BASE, $currency, $scope, $id);
-        $this->writer->save(Currency::XML_PATH_CURRENCY_DEFAULT, $currency, $scope, $id);
     }
 }

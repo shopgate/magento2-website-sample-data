@@ -27,7 +27,6 @@ namespace Shopgate\WebsiteSampleData\Test\Integration\Setup;
 use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Setup\Model\ModuleContext;
 use Magento\Store\Model\ScopeInterface;
@@ -59,7 +58,8 @@ class UninstallerTest extends TestCase
      * Don't simplify the expected exception
      *
      * @throws LocalizedException
-     * @expectedException NoSuchEntityException
+     * @noinspection PhpFullyQualifiedNameUsageInspection
+     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testUninstall(): void
     {

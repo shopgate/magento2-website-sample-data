@@ -76,12 +76,12 @@ class InstallerTest extends TestCase
         );
         $this->assertSame('de_DE', $laptopStoreLocale);
 
-        $desktopStore        = $storeManager->getStore('store_desktop_ru');
-        $desktopStoreCurrency = $reader->getValue(
+        $phoneWebsite         = $storeManager->getWebsite('web_phone');
+        $phoneWebsiteCurrency = $reader->getValue(
             Currency::XML_PATH_CURRENCY_BASE,
-            ScopeInterface::SCOPE_STORES,
-            $desktopStore->getId()
+            ScopeInterface::SCOPE_WEBSITES,
+            $phoneWebsite->getId()
         );
-        $this->assertSame('RUB', $desktopStoreCurrency);
+        $this->assertSame('RUB', $phoneWebsiteCurrency);
     }
 }
