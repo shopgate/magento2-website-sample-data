@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+
+## [0.1.1]
 ### Added
 - Currency configurations
 - Default website, groups and store views
@@ -20,4 +22,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 - Weight configurations
 - Basic test
 
+[Unreleased]: https://github.com/shopgate/magento2-website-sample-data/compare/0.1.1...HEAD
+[0.1.1]: https://github.com/shopgate/magento2-website-sample-data/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/shopgate/magento2-website-sample-data/releases/tag/0.1.0
