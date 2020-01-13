@@ -1,0 +1,3 @@
+code,name,group_default,is_default,"currency"
+"web_computer","Computer Mania","grp_laptop",1,"USD"
+"web_phone","Phones for less","grp_tablet",0,"RUB"

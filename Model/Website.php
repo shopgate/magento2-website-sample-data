@@ -25,8 +25,9 @@ declare(strict_types=1);
 namespace Shopgate\WebsiteSampleData\Model;
 
 use Exception;
-use Magento\Config\Model\ResourceModel\Config as ConfigResource;
 use Magento\Directory\Helper\Data as DirectoryHelper;
+use Magento\Directory\Model\Currency;
+use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -77,8 +78,8 @@ class Website
     private $storeFactory;
     /** @var StoreResource */
     private $storeResource;
-    /** @var ConfigResource */
-    private $config;
+    /** * @var WriterInterface */
+    private $writer;
 
     /**
      * @param SampleDataContext          $sampleDataContext
@@ -92,7 +93,7 @@ class Website
      * @param StoreFactory               $storeFactory
      * @param StoreRepositoryInterface   $storeRepository
      * @param StoreResource              $storeResource
-     * @param ConfigResource             $configResource
+     * @param WriterInterface            $writer
      */
     public function __construct(
         SampleDataContext $sampleDataContext,
@@ -106,7 +107,7 @@ class Website
         StoreFactory $storeFactory,
         StoreRepositoryInterface $storeRepository,
         StoreResource $storeResource,
-        ConfigResource $configResource
+        WriterInterface $writer
     ) {
         $this->fixtureManager    = $sampleDataContext->getFixtureManager();
         $this->csvReader         = $sampleDataContext->getCsvReader();
@@ -120,14 +121,15 @@ class Website
         $this->storeFactory      = $storeFactory;
         $this->storeRepository   = $storeRepository;
         $this->storeResource     = $storeResource;
-        $this->config            = $configResource;
+        $this->writer            = $writer;
     }
 
     /**
      * @param string $websiteFixture
      * @param string $groupFixture
      * @param string $storeFixture
-     * @param string $configFixture
+     * @param string $storeConfigFixture
+     * @param string $websiteConfigFixture
      *
      * @throws LocalizedException
      */
@@ -135,7 +137,8 @@ class Website
         string $websiteFixture,
         string $groupFixture,
         string $storeFixture,
-        string $configFixture
+        string $storeConfigFixture,
+        string $websiteConfigFixture
     ): void {
         $websites = $this->runCreator(
             $websiteFixture,
@@ -165,10 +168,45 @@ class Website
             }
         );
 
+        // store configurations
         $this->runCreator(
-            $configFixture,
+            $storeConfigFixture,
             function (array $row) use ($stores) {
-                $this->saveConfigs($row['locale'], $row['weight_unit'], (int) $stores[$row['code']]->getId());
+                $this->saveConfigs(
+                    $row['locale'],
+                    $row['weight_unit'],
+                    (int) $stores[$row['code']]->getId()
+                );
+            }
+        );
+
+        // website configurations
+        $this->runCreator(
+            $websiteConfigFixture,
+            function (array $row) use ($websites) {
+                $this->writer->save(
+                    Currency::XML_PATH_CURRENCY_BASE,
+                    $row['currency'],
+                    ScopeInterface::SCOPE_WEBSITES,
+                    (int) $websites[$row['code']]->getId()
+                );
+            }
+        );
+
+        $this->runCreator(
+            $groupFixture,
+            function (array $row) use ($groups, $stores) {
+                $this->updateGroupStoreDefault($groups[$row['code']], (int) $stores[$row['store_default']]->getId());
+            }
+        );
+
+        $this->runCreator(
+            $websiteFixture,
+            function (array $row) use ($websites, $groups) {
+                $this->updateWebsiteGroupDefault(
+                    $websites[$row['code']],
+                    (int) $groups[$row['group_default']]->getId()
+                );
             }
         );
     }
@@ -222,7 +260,7 @@ class Website
      * @return StoreInterface
      * @throws AlreadyExistsException
      */
-    protected function createStore(
+    private function createStore(
         string $code,
         string $name,
         WebsiteInterface $website,
@@ -260,7 +298,7 @@ class Website
      * @return WebsiteInterface
      * @throws AlreadyExistsException
      */
-    protected function createWebsite(string $code, string $name, int $isDefault): WebsiteInterface
+    private function createWebsite(string $code, string $name, int $isDefault): WebsiteInterface
     {
         try {
             $website = $this->websiteRepository->get($code);
@@ -310,6 +348,30 @@ class Website
     }
 
     /**
+     * @param GroupInterface $group
+     * @param int            $defaultStoreId
+     *
+     * @throws AlreadyExistsException
+     */
+    private function updateGroupStoreDefault(GroupInterface $group, int $defaultStoreId): void
+    {
+        /** @noinspection PhpParamsInspection */
+        $this->groupResource->save($group->setDefaultStoreId($defaultStoreId));
+    }
+
+    /**
+     * @param WebsiteInterface $website
+     * @param int              $defaultGroupId
+     *
+     * @throws AlreadyExistsException
+     */
+    private function updateWebsiteGroupDefault(WebsiteInterface $website, int $defaultGroupId): void
+    {
+        /** @noinspection PhpParamsInspection */
+        $this->webisteResource->save($website->setDefaultGroupId($defaultGroupId));
+    }
+
+    /**
      * @param string $locale - en_US, de_DE, ru_RU, etc.
      * @param string $weight - kgs, lbs
      * @param int    $id     - id of store, website or 0 for default
@@ -321,7 +383,7 @@ class Website
         int $id = 1,
         string $scope = ScopeInterface::SCOPE_STORES
     ): void {
-        $this->config->saveConfig(DirectoryHelper::XML_PATH_DEFAULT_LOCALE, $locale, $scope, $id);
-        $this->config->saveConfig(DirectoryHelper::XML_PATH_WEIGHT_UNIT, $weight, $scope, $id);
+        $this->writer->save(DirectoryHelper::XML_PATH_DEFAULT_LOCALE, $locale, $scope, $id);
+        $this->writer->save(DirectoryHelper::XML_PATH_WEIGHT_UNIT, $weight, $scope, $id);
     }
 }

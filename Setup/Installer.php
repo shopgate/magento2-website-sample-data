@@ -59,7 +59,8 @@ class Installer implements Setup\SampleData\InstallerInterface
             'Shopgate_WebsiteSampleData::fixtures/websites.csv',
             'Shopgate_WebsiteSampleData::fixtures/groups.csv',
             'Shopgate_WebsiteSampleData::fixtures/stores.csv',
-            'Shopgate_WebsiteSampleData::fixtures/configs.csv'
+            'Shopgate_WebsiteSampleData::fixtures/store_cfg.csv',
+            'Shopgate_WebsiteSampleData::fixtures/website_cfg.csv'
         );
     }
 }
