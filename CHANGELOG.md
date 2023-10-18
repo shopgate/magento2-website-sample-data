@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 ## [Unreleased]
 
+## [0.2.1]
+### Updated
+- M2 composer dependencies (to support PHP8.2 & M2.4.6)
+
 ## [0.2.0]
 ### Added
 - Currency configurations
